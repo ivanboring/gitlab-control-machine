@@ -1,0 +1,93 @@
+uuid: 799e7d85-ec20-47a7-82bf-bc6fff778781
+langcode: en
+status: true
+dependencies:
+  module:
+    - eca_gitlab_api
+    - eca_tool
+    - modeler_api
+third_party_settings:
+  modeler_api:
+    modeler_id: workflow_modeler
+    data: 'hash:c7213362787d7873d3d0b901659655e0'
+    label: 'Gitlab Comment Create'
+    documentation: 'When a comment is created'
+    version: 1.0.0
+id: gitlab_comment_create
+weight: 0
+template: false
+events:
+  gitlab_comment_hca7ucv2:
+    plugin: 'eca_gitlab_api_event:comment'
+    label: 'GitLab comment added'
+    configuration:
+      scope: all
+      projects: {  }
+    successors:
+      -
+        id: select_action_30lials8
+        condition: gitlab_comment_hca7ucv2_to_select_action_30lials8_gc86ech3_condition
+      -
+        id: select_action_blujopr0
+        condition: gitlab_comment_hca7ucv2_to_select_action_blujopr0_azxeahgq_condition
+conditions:
+  gitlab_comment_hca7ucv2_to_select_action_30lials8_gc86ech3_condition:
+    plugin: eca_gitlab_api_slash_command
+    label: '/do:assignMyself'
+    configuration:
+      command: 'do:assignMyself'
+      body: '[event:body]'
+      args: ''
+      negate: false
+  gitlab_comment_hca7ucv2_to_select_action_blujopr0_azxeahgq_condition:
+    plugin: eca_gitlab_api_slash_command
+    label: '/do:unassignMyself'
+    configuration:
+      command: 'do:unassignMyself'
+      body: '[event:body]'
+      args: ''
+      negate: false
+gateways: {  }
+actions:
+  select_action_30lials8:
+    label: 'Tool: GitLab: set issue assignee'
+    plugin: 'eca_tool:gitlab_api_set_issue_assignee'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_iid: '[event:issue_iid]'
+      tool_input_assignee_username: '[event:user_username]'
+      tool_output_issue_iid: next_token
+    successors:
+      -
+        id: tool_gitlab_set_issue_state_zbgcc27t
+        condition: ''
+  tool_gitlab_set_issue_state_zbgcc27t:
+    label: 'Tool: GitLab: set issue state'
+    plugin: 'eca_tool:gitlab_api_set_issue_state'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_id: '[event:issue_id]'
+      tool_input_state: in_progress
+      tool_output_issue_id: next_token
+    successors: {  }
+  select_action_blujopr0:
+    label: 'Tool: GitLab: unassign user from issue'
+    plugin: 'eca_tool:gitlab_api_unset_issue_assignee'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_iid: '[event:issue_iid]'
+      tool_input_assignee_username: '[event:user_username]'
+      tool_output_issue_iid: next_token
+    successors:
+      -
+        id: tool_gitlab_set_issue_state_fhfou4ru
+        condition: ''
+  tool_gitlab_set_issue_state_fhfou4ru:
+    label: 'Tool: GitLab: set issue state'
+    plugin: 'eca_tool:gitlab_api_set_issue_state'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_id: '[event:issue_id]'
+      tool_input_state: open
+      tool_output_issue_id: next_token
+    successors: {  }
