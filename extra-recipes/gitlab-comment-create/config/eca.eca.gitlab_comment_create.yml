@@ -9,7 +9,7 @@ dependencies:
 third_party_settings:
   modeler_api:
     modeler_id: workflow_modeler
-    data: 'hash:c7213362787d7873d3d0b901659655e0'
+    data: 'hash:4f956b006f8ba5f704184f4d7ab74855'
     label: 'Gitlab Comment Create'
     documentation: 'When a comment is created'
     version: 1.0.0
