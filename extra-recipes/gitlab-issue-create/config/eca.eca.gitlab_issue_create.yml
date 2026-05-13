@@ -1,0 +1,82 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - eca_gitlab_api
+    - eca_tool
+    - modeler_api
+third_party_settings:
+  modeler_api:
+    modeler_id: workflow_modeler
+    data: 'hash:d0d05b108408a2a4e57c0433a4af0b91'
+    label: 'Gitlab Issue Create'
+    documentation: 'All the things that should happen on issue create.'
+    version: 1.0.0
+id: gitlab_issue_create
+weight: 0
+template: false
+events:
+  gitlab_issue_created_mzleerc0:
+    plugin: 'eca_gitlab_api_event:issue_created'
+    label: 'Issue is created'
+    configuration:
+      scope: all
+      projects: {  }
+    successors:
+      -
+        id: select_action_qxfdkm1z
+        condition: gitlab_issue_created_mzleerc0_to_select_action_qxfdkm1z_xyrhd7pp_condition
+      -
+        id: select_action_cujtgz73
+        condition: gitlab_issue_created_mzleerc0_to_select_action_cujtgz73_l65rxnsp_condition
+conditions:
+  gitlab_issue_created_mzleerc0_to_select_action_qxfdkm1z_xyrhd7pp_condition:
+    plugin: eca_gitlab_api_body_follows_template
+    label: 'Body is at least 50 characters and one heading'
+    configuration:
+      min_length: 50
+      min_headings: 1
+      body: '[event:body]'
+      required_headings: ''
+      negate: false
+  gitlab_issue_created_mzleerc0_to_select_action_cujtgz73_l65rxnsp_condition:
+    plugin: eca_gitlab_api_body_follows_template
+    label: 'Body is NOT 50 characters'
+    configuration:
+      min_length: 50
+      min_headings: 1
+      negate: true
+      body: '[event:body]'
+      required_headings: ''
+gateways: {  }
+actions:
+  select_action_qxfdkm1z:
+    label: 'Set accepted'
+    plugin: 'eca_tool:gitlab_api_add_issue_label'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_iid: '[event:issue_iid]'
+      tool_input_labels: 'state::accepted'
+      tool_output_issue_iid: output_iid
+    successors: {  }
+  select_action_cujtgz73:
+    label: "Set Won't do"
+    plugin: 'eca_tool:gitlab_api_set_issue_state'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_id: '[event:issue_id]'
+      tool_input_state: wont_do
+      tool_output_issue_id: output_gid
+    successors:
+      -
+        id: tool_gitlab_add_comment_to_issue_tc97ubat
+        condition: ''
+  tool_gitlab_add_comment_to_issue_tc97ubat:
+    label: 'Add comment to add more information'
+    plugin: 'eca_tool:gitlab_api_add_issue_comment'
+    configuration:
+      tool_input_project: '[event:project_id]'
+      tool_input_issue_iid: '[event:issue_iid]'
+      tool_input_body: "The issue body doesn't seem to have enough information. Please add more information about your issue."
+      tool_output_issue_iid: output_iid
+    successors: {  }

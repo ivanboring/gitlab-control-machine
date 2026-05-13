@@ -20,3 +20,13 @@ composer config scripts.post-drupal-scaffold-cmd \
 
 # Add Drush.
 composer require -n --no-update drush/drush
+
+# Make sure that dev stability packages are allowed.
+composer config -n minimum-stability dev
+
+# Add extra packages for development.
+composer require -n --no-update \
+    drupal/eca_tool:1.0.x-dev@dev \
+    drupal/admin_toolbar:^3.6 \
+    drupal/gitlab_api:^3.0@alpha \
+    drupal/modeler:^1.0

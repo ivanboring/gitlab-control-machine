@@ -1,0 +1,5 @@
+name: 'Gitlab Access Projects'
+description: 'Set up access to Gitlab projects.'
+type: 'Gitlab Access'
+recipes:
+  - ../extra-recipes/gitlab-issue-create

@@ -1,0 +1,11 @@
+uuid: 8bf36980-5f7f-453d-8a49-80b6234e106a
+langcode: en
+status: true
+dependencies:
+  config:
+    - key.key.gitlab_access_token_for_ai_agents
+id: drupal_gitlab
+label: 'Drupal Gitlab'
+url: 'https://git.drupalcode.org'
+auth_token_key: gitlab_access_token_for_ai_agents
+default_server: true

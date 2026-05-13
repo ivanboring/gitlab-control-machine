@@ -1,0 +1,19 @@
+uuid: c174a2ef-e6be-4f2d-b8d0-7d1178d64c77
+langcode: en
+status: true
+dependencies:
+  config:
+    - gitlab_api.gitlab_server.drupal_gitlab
+    - key.key.gitlab_access_token_for_ai_agents
+    - key.key.gitlab_webhook_password_for_ai_agents
+id: ai_agents
+label: 'AI Agents'
+server: drupal_gitlab
+gitlab_project_id: 158891
+gitlab_project_path: ai_agents
+access_token_source: key
+access_token_key: gitlab_access_token_for_ai_agents
+webhook_secret_keys:
+  gitlab_webhook_password_for_ai_agents: gitlab_webhook_password_for_ai_agents
+maintainers:
+  - '@marcus_johansson'

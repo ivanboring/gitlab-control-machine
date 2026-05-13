@@ -1,0 +1,20 @@
+name: 'Gitlab Issue Create'
+description: 'Webhook to run specific jobs on Gitlab issue creation.'
+type: 'Gitlab ECA Hook'
+install:
+  - eca
+  - eca_base
+  - gitlab_api
+  - eca_tool
+  - eca_ui
+  - eca_gitlab_api
+  - modeler
+config:
+  import:
+    eca: '*'
+    eca_base: '*'
+    gitlab_api: '*'
+    eca_tool: '*'
+    eca_ui: '*'
+    eca_gitlab_api: '*'
+    modeler: '*'

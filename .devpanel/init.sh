@@ -59,6 +59,17 @@ else
   time drush -n updb
 fi
 
+#== Manually install admin toolbar
+echo
+echo 'Install admin toolbar.'
+time drush en -y admin_toolbar admin_toolbar_tools
+
+#== Install the extra recipes.
+echo
+echo 'Install the extra recipes.'
+time drush recipe ../extra-recipes/gitlab-issue-create
+time drush recipe ../extra-recipes/access-projects
+
 #== Warm up caches.
 echo
 echo 'Run cron.'
